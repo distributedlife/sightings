@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.distributedlife.animalwiki.AspectRatioImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/image"
+            android:adjustViewBounds="true"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Common Name"
+            android:paddingLeft="7dp"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:id="@+id/commonName"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Official Name"
+            android:paddingLeft="7dp"
+            android:paddingRight="10dp"
+            android:textStyle="italic"
+            android:id="@+id/officialName"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Conservation Status"
+            android:id="@+id/conservationStatus"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Kingdom"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Kingdom"
+                    android:id="@+id/kingdom"/>
+            </TableRow>
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Phylum"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Phylum"
+                    android:id="@+id/phylum"/>
+            </TableRow>
+
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Class"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Class"
+                    android:id="@+id/klass"/>
+            </TableRow>
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Order"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Order"
+                    android:id="@+id/order"/>
+            </TableRow>
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Family"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Family"
+                    android:id="@+id/family"/>
+            </TableRow>
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Genus"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Genus"
+                    android:id="@+id/genus"/>
+            </TableRow>
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:text="Species"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Species"
+                    android:id="@+id/species"/>
+            </TableRow>
+
+
+            <TableRow android:layout_height="wrap_content"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="1"
+                      android:id="@+id/subspeciesRow">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="10dp"
+                    android:text="Subspecies"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Subspecies"
+                    android:id="@+id/subspecies"/>
+            </TableRow>
+        </TableLayout>
+
+        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:id="@+id/webView"
+                 android:focusable="false">
+        </WebView>
+    </LinearLayout>
+</ScrollView>
