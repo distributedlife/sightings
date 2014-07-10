@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:id="@+id/scrollView">
 
@@ -10,32 +10,11 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-        <com.distributedlife.animalwiki.AspectRatioImageView
+        <com.distributedlife.animalwiki.android.AspectRatioImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/image"
             android:adjustViewBounds="true"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Common Name"
-            android:paddingLeft="7dp"
-            android:paddingRight="10dp"
-            android:textStyle="bold"
-            android:id="@+id/commonName"
-            android:textSize="30sp"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Official Name"
-            android:paddingLeft="7dp"
-            android:paddingRight="10dp"
-            android:textStyle="italic"
-            android:id="@+id/officialName"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -48,20 +27,145 @@
             android:textStyle="bold"
             android:gravity="center_horizontal"/>
 
-        <TableLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Seen It"
+                android:id="@+id/sighting"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch1"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                />
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch2"
+                android:background="@drawable/border"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/swatch1"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch3"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch2"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch4"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch3"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch5"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch4"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch6"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch5"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch7"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch6"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch8"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch7"
+                android:layout_marginLeft="4dp"/>
+
+            <TextView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:id="@+id/swatch9"
+                android:background="@drawable/border"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/swatch8"
+                android:layout_marginLeft="4dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Common Name"
+            android:paddingTop="8dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:id="@+id/commonName"
+            android:textSize="30sp"
+            android:singleLine="false"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Official Name"
+            android:paddingLeft="7dp"
+            android:paddingRight="10dp"
+            android:textStyle="italic"
+            android:id="@+id/officialName"/>
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:paddingLeft="7dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="4dp">
+
             <TableRow android:layout_height="wrap_content"
                       android:layout_width="fill_parent"
-                      android:layout_weight="1">
+                      android:layout_weight="1"
+                      android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Kingdom"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
                     />
@@ -76,14 +180,14 @@
 
             <TableRow android:layout_height="wrap_content"
                       android:layout_width="fill_parent"
-                      android:layout_weight="1">
+                      android:layout_weight="1"
+                      android:visibility="gone">
 
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Phylum"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"/>
 
@@ -106,7 +210,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Class"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"/>
 
@@ -116,6 +219,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Class"
                     android:id="@+id/klass"/>
+
             </TableRow>
 
 
@@ -127,7 +231,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Order"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"/>
 
@@ -149,7 +252,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Family"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"/>
 
@@ -170,7 +272,6 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Genus"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"
                     android:textStyle="bold"
                     />
@@ -186,7 +287,8 @@
 
             <TableRow android:layout_height="wrap_content"
                       android:layout_width="fill_parent"
-                      android:layout_weight="1">
+                      android:layout_weight="1"
+                      android:id="@+id/speciesRow">
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -194,7 +296,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textStyle="bold"
                     android:text="Species"
-                    android:paddingLeft="7dp"
                     android:paddingRight="10dp"/>
 
                 <TextView
@@ -204,30 +305,18 @@
                     android:text="Species"
                     android:id="@+id/species"/>
             </TableRow>
-
-
-            <TableRow android:layout_height="wrap_content"
-                      android:layout_width="fill_parent"
-                      android:layout_weight="1"
-                      android:id="@+id/subspeciesRow">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"
-                    android:paddingLeft="7dp"
-                    android:paddingRight="10dp"
-                    android:text="Subspecies"/>
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Subspecies"
-                    android:id="@+id/subspecies"/>
-            </TableRow>
         </TableLayout>
+
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Description"
+            android:paddingLeft="7dp"
+            android:paddingTop="16dp"
+            android:textStyle="bold"/>
 
         <WebView xmlns:android="http://schemas.android.com/apk/res/android"
                  android:layout_width="fill_parent"

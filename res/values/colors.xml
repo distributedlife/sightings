@@ -2,4 +2,5 @@
 <resources>
     <color name="text">#000</color>
     <color name="white">#fff</color>
+    <color name="orange">#ff9944</color>
 </resources>

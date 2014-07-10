@@ -1,0 +1,42 @@
+{
+	"klass": {
+		"aves": "Birds"
+	},
+	"order": {
+		"struthioniformes": "Ostriches, emus, kiwis and others",
+		"tinamiformes": "Tinamous",
+		"answeriformes": "Waterfowl",
+		"galliformes": "Fowl",
+		"charadriiformes": "Gulls, buttonquails, plovers and others",
+		"gaviifoemes": "Loons",
+		"podicipediformes": "Grebes",
+		"Procellariiformes": "Albatrosses, petrels and others",
+		"Sphenisciformes": "Penguins",
+		"Pelecaniformes": "Pelicans and others",
+		"Pharthontiformes": "Tropicbirds",
+		"Ciconiiformes": "Storks and others",
+		"Cathartiformes": "New World vultures",
+		"Phoenicopteriformes": "Flamingos",
+		"Falconiformes": "Falcons, eagles, hawks and others",
+		"Gruiformes": "Cranes and others",
+		"Pteroclidiformes": "Sandgrouse",
+		"Columbiformes": "Doves and pigeons",
+		"Psittaciformes": "Parrots and others",
+		"Cuculiformes": "Cuckoos and turacos",
+		"Opisthocomiformes": "Hoatzin",
+		"Strigiformes": "Owls",
+		"Caprimulgiformes": "Nightjars and others",
+		"Apodiformes": "Swifts and hummingbirds",
+		"Coraciiformes": "Kingfishers and others",
+		"Piciformes": "Woodpeckers and others",
+		"Trogoniformes": "Trogons",
+		"Coliiformes": "Mousebirds",
+		"Passeriformes": "Passerines"
+	},
+	"family": {
+
+	},
+	"genus": {
+		
+	}
+}

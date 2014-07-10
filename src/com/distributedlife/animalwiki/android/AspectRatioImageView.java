@@ -1,4 +1,4 @@
-package com.distributedlife.animalwiki;
+package com.distributedlife.animalwiki.android;
 
 import android.content.Context;
 import android.util.AttributeSet;

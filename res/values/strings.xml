@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">animalwiki</string>
-    <string name="not_found">missing word</string>
+    <string name="app_name">Sightings</string>
+    <string name="not_found">Abyssian Crimsonwing</string>
 </resources>
