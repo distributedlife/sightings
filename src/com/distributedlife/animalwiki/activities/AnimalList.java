@@ -36,6 +36,7 @@ public class AnimalList extends Activity {
 
         try {
             DataLoader.load(getAssets().open("birds.json"));
+            DataLoader.add(getAssets().open("mammals.json"));
             ReferenceDataLoader.load(getAssets().open("reference.json"));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -67,18 +68,6 @@ public class AnimalList extends Activity {
 
     private void setupSearchControl(final Activity parent) {
         EditText search = (EditText) findViewById(R.id.search);
-//        search.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-////                text = String.valueOf(((TextView) view).getText());
-////                List<Animal> filteredAnimals = filter(text, seenOnly);
-////
-////                animalsAdapter.setFilter(filteredAnimals);
-////                listCount.setText(Integer.toString(animalsAdapter.getCount()));
-//
-//                return false;
-//            }
-//        });
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,11 +75,6 @@ public class AnimalList extends Activity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                text = String.valueOf(charSequence);
-//                List<Animal> filteredAnimals = filter(text, seenOnly);
-//
-//                animalsAdapter.setFilter(filteredAnimals);
-//                listCount.setText(Integer.toString(animalsAdapter.getCount()));
             }
 
             @Override

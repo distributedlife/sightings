@@ -55,7 +55,11 @@ public class AnimalsAdapter extends ArrayAdapter<Animal> {
         for (int i = 0; i < animal.getColours().size(); i++) {
             String colour = animal.getColour(i);
             if (colour == null) {
-                rowView.findViewById(AnimalFormatting.swatches().get(i)).setVisibility(View.GONE);
+                View swatch = rowView.findViewById(AnimalFormatting.swatches().get(i));
+                if (swatch != null) {
+                    swatch.setVisibility(View.GONE);
+                }
+
                 continue;
             }
 
@@ -86,7 +90,7 @@ public class AnimalsAdapter extends ArrayAdapter<Animal> {
                 Drawable d = Drawable.createFromStream(ims, null);
                 imageView.setImageDrawable(d);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(String.format("Missing image for %s. Filename: %s", animal.getCommonName(), animal.getFilename()));
             }
         }
     }

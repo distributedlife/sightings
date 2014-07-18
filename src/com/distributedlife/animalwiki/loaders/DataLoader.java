@@ -15,55 +15,59 @@ import java.util.List;
 public class DataLoader {
     static List<Animal> animals = new ArrayList<Animal>();
 
-    public static void load(InputStream jsonFile) {
-        if (animals.size() > 0) {
-            return;
-        }
-
+    public static void add(InputStream inputStream) {
         try {
-            JSONObject root = new JSONObject(IOUtils.toString(jsonFile));
-            JSONArray birds = root.getJSONArray("birds");
+            JSONObject root = new JSONObject(IOUtils.toString(inputStream));
+            JSONArray animals = root.getJSONArray("animals");
 
-            for (int i = 0; i < birds.length(); i++) {
-                JSONObject bird = birds.getJSONObject(i);
+            for (int i = 0; i < animals.length(); i++) {
+                JSONObject animal = animals.getJSONObject(i);
 
                 List<String> colours;
-                if (bird.has("colours")) {
-                    colours = mapToStringArray(bird.getJSONArray("colours"));
+                if (animal.has("colours")) {
+                    colours = mapToStringArray(animal.getJSONArray("colours"));
                 } else {
                     colours = new ArrayList<String>();
                 }
 
                 List<String> countries;
-                if (bird.has("countries")) {
-                    countries = mapToStringArray(bird.getJSONArray("countries"));
+                if (animal.has("countries")) {
+                    countries = mapToStringArray(animal.getJSONArray("countries"));
                 } else {
                     countries = new ArrayList<String>();
                 }
 
-                animals.add(new Animal(
-                        bird.getString("common_name"),
-                        bird.getString("official_name"),
-                        bird.getString("phylum"),
-                        bird.getString("klass"),
-                        bird.getString("order"),
-                        bird.getString("family"),
-                        bird.getString("genus"),
-                        bird.getString("species"),
-                        bird.getString("subspecies"),
-                        ConservationStatus.fromString(bird.getString("conservation_status")),
-                        bird.getString("new_filename"),
+                DataLoader.animals.add(new Animal(
+                        animal.getString("common_name"),
+                        animal.getString("official_name"),
+                        animal.getString("phylum"),
+                        animal.getString("klass"),
+                        animal.getString("order"),
+                        animal.getString("family"),
+                        animal.getString("genus"),
+                        animal.getString("species"),
+                        animal.getString("subspecies"),
+                        ConservationStatus.fromString(animal.getString("conservation_status")),
+                        animal.getString("new_filename"),
                         colours,
                         countries,
-                        bird.has("endemic") ? bird.getBoolean("endemic") : false
+                        animal.has("endemic") ? animal.getBoolean("endemic") : false
                 ));
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("birds.json not found. Doh!.", e);
+            throw new RuntimeException("IO Exception", e);
         } catch (JSONException e) {
-            throw new RuntimeException("birds.json is not right or not used right", e);
+            throw new RuntimeException("JSON exception", e);
         }
+    }
+
+    public static void load(InputStream inputStream) {
+        if (animals.size() > 0) {
+            return;
+        }
+
+        add(inputStream);
     }
 
     private static List<String> mapToStringArray(JSONArray colours) {
