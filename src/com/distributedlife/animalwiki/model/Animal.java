@@ -253,4 +253,8 @@ public class Animal {
 
         return derp;
     }
+
+    public List<String> getCountries() {
+        return countries;
+    }
 }

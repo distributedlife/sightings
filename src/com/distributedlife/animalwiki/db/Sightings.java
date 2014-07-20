@@ -1,4 +1,4 @@
-package com.distributedlife.animalwiki;
+package com.distributedlife.animalwiki.db;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -2,26 +2,31 @@ package com.distributedlife.animalwiki.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.*;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.ListView;
 import com.distributedlife.animalwiki.R;
-import com.distributedlife.animalwiki.Sightings;
+import com.distributedlife.animalwiki.db.Sightings;
+import com.distributedlife.animalwiki.filters.*;
 import com.distributedlife.animalwiki.listAdapters.AnimalsAdapter;
+import com.distributedlife.animalwiki.listAdapters.FilterAdapter;
 import com.distributedlife.animalwiki.loaders.DataLoader;
 import com.distributedlife.animalwiki.loaders.ReferenceDataLoader;
 import com.distributedlife.animalwiki.model.Animal;
+import com.distributedlife.animalwiki.model.ConservationStatus;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalList extends Activity {
-    TextView listCount;
+    public static final String SEEN = "Seen";
+    public static final String UNSEEN = "Unseen";
+    public static final String CLASS = "Class";
+    private final FilterApplication filterApplication = new FilterApplication();
     private Sightings sightings;
     private AnimalsAdapter animalsAdapter;
-    private String text;
-    private boolean seenOnly;
+    private List<Filter> listOfFilters = new ArrayList<Filter>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,35 @@ public class AnimalList extends Activity {
         setContentView(R.layout.animal_list);
 
         sightings = new Sightings(this);
-        seenOnly = false;
-        text = "";
+        loadContent();
+        buildFilterList(DataLoader.getAnimals());
 
-        setupSearchControl(this);
 
+        ((ListView) findViewById(R.id.place_to_put_list)).setAdapter(new AnimalsAdapter(this, filterApplication.apply(listOfFilters, DataLoader.getAnimals()), sightings, this));
+        animalsAdapter = (AnimalsAdapter) ((ListView) findViewById(R.id.place_to_put_list)).getAdapter();
+
+
+        ((ListView) findViewById(R.id.filters)).setAdapter(new FilterAdapter(this, listOfFilters, this));
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View view, float v) {}
+
+            @Override
+            public void onDrawerOpened(View view) {}
+
+            @Override
+            public void onDrawerClosed(View view) {
+                animalsAdapter.setFilter(filterApplication.apply(listOfFilters, DataLoader.getAnimals()));
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {}
+        });
+    }
+
+    private void loadContent() {
         try {
             DataLoader.load(getAssets().open("birds.json"));
             DataLoader.add(getAssets().open("mammals.json"));
@@ -41,15 +70,75 @@ public class AnimalList extends Activity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        List<Animal> animals = new ArrayList<Animal>(DataLoader.getAnimals());
-        ((ListView) findViewById(R.id.place_to_put_list)).setAdapter(new AnimalsAdapter(this, animals, sightings, this));
-        animalsAdapter = (AnimalsAdapter) ((ListView) findViewById(R.id.place_to_put_list)).getAdapter();
+    }
 
-        listCount = (TextView) findViewById(R.id.listTotal);
-        listCount.setText(Integer.toString(DataLoader.getAnimals().size()));
+    private void buildFilterList(List<Animal> animals) {
+        listOfFilters.add(new Heading("Sightings"));
+        listOfFilters.add(new SeenFilter(true, sightings));
+        listOfFilters.add(new NotSeenFilter(true, sightings));
 
-        Switch filterBySeen = (Switch) findViewById(R.id.seenFilter);
-        filterBySeen.setOnCheckedChangeListener(new FilterBySeen());
+        listOfFilters.add(new Heading("Class"));
+        addClassFilters(animals);
+
+        listOfFilters.add(new Heading("Conservation Status"));
+        addConservationStatusFilters(animals);
+
+        listOfFilters.add(new Heading("Country"));
+        addCountryFilters(animals);
+
+        listOfFilters.add(new Heading("Order"));
+        addOrderFilters(animals);
+    }
+
+    private void addCountryFilters(List<Animal> animals) {
+        List<String> done = new ArrayList<String>();
+        for(Animal animal : animals) {
+            for (String country : animal.getCountries()) {
+                if (done.contains(country)) {
+                    continue;
+                }
+
+                done.add(country);
+
+                listOfFilters.add(new CountryFilter(country, true));
+            }
+        }
+    }
+
+    private void addConservationStatusFilters(List<Animal> animals) {
+        List<ConservationStatus> done = new ArrayList<ConservationStatus>();
+        for(Animal animal : animals) {
+            if (done.contains(animal.getConservationStatus())) {
+                continue;
+            }
+
+            done.add(animal.getConservationStatus());
+            listOfFilters.add(new ConservationStatusFilter(animal.getConservationStatus(), true));
+        }
+    }
+
+    private void addOrderFilters(List<Animal> animals) {
+        List<String> done = new ArrayList<String>();
+        for(Animal animal : animals) {
+            if (done.contains(animal.getOrder())) {
+                continue;
+            }
+
+            done.add(animal.getOrder());
+            listOfFilters.add(new OrderFilter(animal.getOrder(), true));
+        }
+    }
+
+    private void addClassFilters(List<Animal> animals) {
+        List<String> done = new ArrayList<String>();
+        for(Animal animal : animals) {
+            if (done.contains(animal.getKlass())) {
+                continue;
+            }
+
+            done.add(animal.getKlass());
+            listOfFilters.add(new ClassFilter(animal.getKlass(), true));
+        }
     }
 
     @Override
@@ -64,55 +153,5 @@ public class AnimalList extends Activity {
         super.onDestroy();
 
         sightings.close();
-    }
-
-    private void setupSearchControl(final Activity parent) {
-        EditText search = (EditText) findViewById(R.id.search);
-
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                text = String.valueOf(editable);
-                List<Animal> filteredAnimals = filter(text, seenOnly);
-
-                animalsAdapter.setFilter(filteredAnimals);
-                listCount.setText(Integer.toString(animalsAdapter.getCount()));
-            }
-        });
-    }
-
-    private List<Animal> filter(String text, boolean seenOnly) {
-        List<Animal> results = new ArrayList<Animal>();
-
-        for(Animal animal: DataLoader.getAnimals()) {
-            if (animal.getCommonName().contains(text.toLowerCase())) {
-                if (seenOnly) {
-                    if (sightings.hasSighting(animal.getCommonName().toLowerCase())) {
-                        results.add(animal);
-                    }
-                } else {
-                    results.add(animal);
-                }
-            }
-        }
-
-        return results;
-    }
-
-    private class FilterBySeen implements CompoundButton.OnCheckedChangeListener {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-            seenOnly = checked;
-
-            animalsAdapter.setFilter(filter(text, seenOnly));
-            listCount.setText(Integer.toString(animalsAdapter.getCount()));
-        }
     }
 }

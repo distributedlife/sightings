@@ -2,7 +2,7 @@ package com.distributedlife.animalwiki.clickaction;
 
 import android.app.Activity;
 import android.view.View;
-import com.distributedlife.animalwiki.Sightings;
+import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.model.Sighting;
 
 public class ToggleSeenIt implements View.OnLongClickListener {

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.distributedlife.animalwiki.R;
-import com.distributedlife.animalwiki.Sightings;
+import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.clickaction.RemoveSeenIt;
 import com.distributedlife.animalwiki.clickaction.SeenIt;
 import com.distributedlife.animalwiki.formatting.AnimalFormatting;

@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.distributedlife.animalwiki.R;
-import com.distributedlife.animalwiki.Sightings;
+import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.clickaction.OpenElement;
 import com.distributedlife.animalwiki.clickaction.ToggleSeenIt;
 import com.distributedlife.animalwiki.formatting.AnimalFormatting;
@@ -63,7 +63,10 @@ public class AnimalsAdapter extends ArrayAdapter<Animal> {
                 continue;
             }
 
-            rowView.findViewById(AnimalFormatting.swatches().get(i)).setBackgroundColor(Color.parseColor(colour));
+            View swatch = rowView.findViewById(AnimalFormatting.swatches().get(i));
+            if (swatch != null) {
+                swatch.setBackgroundColor(Color.parseColor(colour));
+            }
         }
 
         for (int i = animal.getColours().size(); i < 9; i++) {
