@@ -1,63 +1,120 @@
 package com.distributedlife.animalwiki.listAdapters;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 import com.distributedlife.animalwiki.R;
 import com.distributedlife.animalwiki.clickaction.ToggleFilterAction;
+import com.distributedlife.animalwiki.clickaction.ZeroFilterList;
 import com.distributedlife.animalwiki.filters.Filter;
-import com.distributedlife.animalwiki.filters.Heading;
 import com.distributedlife.animalwiki.filters.ToggleFilter;
+import com.distributedlife.animalwiki.filters.ZeroFilter;
 
 import java.util.List;
+import java.util.Map;
 
-public class FilterAdapter extends ArrayAdapter<Filter> {
-    private List<Filter> filterItems;
-    private final Activity owner;
+public class FilterAdapter extends BaseExpandableListAdapter {
     private final Context context;
+    private final List<String> headers;
+    private final Map<String, List<Filter>> children;
 
-    public FilterAdapter(Context context, List<Filter> filterItems, Activity owner) {
-        super(context, R.id.filters, filterItems);
+    public FilterAdapter(Context context, List<String> headers, Map<String, List<Filter>> children) {
         this.context = context;
-        this.filterItems = filterItems;
-        this.owner = owner;
+        this.headers = headers;
+        this.children = children;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Filter filter = filterItems.get(position);
+    public int getGroupCount() {
+        return headers.size();
+    }
 
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return children.get(headers.get(groupPosition)).size();
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return headers.get(groupPosition);
+    }
+
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
+        return children.get(headers.get(groupPosition)).get(childPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded,	View convertView, ViewGroup parent) {
+        String headerTitle = (String) getGroup(groupPosition);
+
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.filter_heading, null);
+        }
+
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.label);
+        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setText(headerTitle);
+
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        Filter filter = (Filter) getChild(groupPosition, childPosition);
         if (filter instanceof ToggleFilter) {
+            if (convertView == null) {
+                convertView = layoutInflater.inflate(R.layout.filter_pick_item, null);
+            }
+
             ToggleFilter toggleFilter = (ToggleFilter) filter;
 
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.filter_pick_item, parent, false);
+            ((TextView) convertView.findViewById(R.id.label)).setText(toggleFilter.getName());
 
-            ((TextView) rowView.findViewById(R.id.label)).setText(toggleFilter.getName());
-
-            ToggleButton toggle = (ToggleButton) rowView.findViewById(R.id.toggle);
+            Switch toggle = (Switch) convertView.findViewById(R.id.toggle);
             toggle.setChecked(toggleFilter.getValue());
             toggle.setOnCheckedChangeListener(new ToggleFilterAction(toggleFilter));
-
-            return rowView;
         }
-        if (filter instanceof Heading) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.filter_heading, parent, false);
+        if (filter instanceof ZeroFilter) {
+            if (convertView == null) {
+                convertView = layoutInflater.inflate(R.layout.filter_reset_all, null);
+            }
 
-            ((TextView) rowView.findViewById(R.id.label)).setText(filter.getName());
+            ZeroFilter zeroFilter = (ZeroFilter) filter;
 
-//            CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.enabled);
-//            checkBox.setOnCheckedChangeListener();
-
-            return rowView;
+            Button button = (Button) convertView.findViewById(R.id.none);
+            button.setOnClickListener(new ZeroFilterList(zeroFilter.getFilters(), this));
         }
 
-        return null;
+        return convertView;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
     }
 }

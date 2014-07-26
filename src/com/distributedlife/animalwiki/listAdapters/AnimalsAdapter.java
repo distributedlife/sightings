@@ -2,7 +2,6 @@ package com.distributedlife.animalwiki.listAdapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.distributedlife.animalwiki.R;
-import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.clickaction.OpenElement;
 import com.distributedlife.animalwiki.clickaction.ToggleSeenIt;
+import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.formatting.AnimalFormatting;
 import com.distributedlife.animalwiki.model.Animal;
 
@@ -39,51 +38,53 @@ public class AnimalsAdapter extends ArrayAdapter<Animal> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Animal animal = allAnimals.get(position);
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.animal_list_item, parent, false);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.animal_list_item, parent, false);
+        }
 
-        rowView.setOnClickListener(new OpenElement(animal.getWikiFileName(), owner));
-        rowView.setOnLongClickListener(new ToggleSeenIt(animal.getCommonName(), owner));
+        convertView.setOnClickListener(new OpenElement(animal.getWikiFileName(), owner));
+        convertView.setOnLongClickListener(new ToggleSeenIt(animal.getCommonName(), owner));
 
-        ((TextView) rowView.findViewById(R.id.label)).setText(animal.getCommonName());
+        ((TextView) convertView.findViewById(R.id.label)).setText(animal.getCommonName());
 
-        TextView conservationStatus = (TextView) rowView.findViewById(R.id.conservationStatus);
+        TextView conservationStatus = (TextView) convertView.findViewById(R.id.conservationStatus);
         conservationStatus.setText(animal.getConservationStatus().toAbbreviation());
         conservationStatus.setTextColor(AnimalFormatting.getTextColourForConservationStatus(animal.getConservationStatus()));
         conservationStatus.setBackgroundColor(AnimalFormatting.getBackgroundColourForConservationStatus(animal.getConservationStatus()));
 
-        for (int i = 0; i < animal.getColours().size(); i++) {
-            String colour = animal.getColour(i);
-            if (colour == null) {
-                View swatch = rowView.findViewById(AnimalFormatting.swatches().get(i));
-                if (swatch != null) {
-                    swatch.setVisibility(View.GONE);
-                }
+//        for (int i = 0; i < animal.getColours().size(); i++) {
+//            String colour = animal.getColour(i);
+//            if (colour == null) {
+//                View swatch = convertView.findViewById(AnimalFormatting.swatches().get(i));
+//                if (swatch != null) {
+//                    swatch.setVisibility(View.GONE);
+//                }
+//
+//                continue;
+//            }
+//
+//            View swatch = convertView.findViewById(AnimalFormatting.swatches().get(i));
+//            if (swatch != null) {
+//                swatch.setBackgroundColor(Color.parseColor(colour));
+//            }
+//        }
+//
+//        for (int i = animal.getColours().size(); i < 9; i++) {
+//            convertView.findViewById(AnimalFormatting.swatches().get(i)).setVisibility(View.GONE);
+//        }
 
-                continue;
-            }
-
-            View swatch = rowView.findViewById(AnimalFormatting.swatches().get(i));
-            if (swatch != null) {
-                swatch.setBackgroundColor(Color.parseColor(colour));
-            }
-        }
-
-        for (int i = animal.getColours().size(); i < 9; i++) {
-            rowView.findViewById(AnimalFormatting.swatches().get(i)).setVisibility(View.GONE);
-        }
-
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.imageIcon);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageIcon);
         displayImage(animal, imageView, owner);
 
 
         if (sightings.hasSighting(animal.getCommonName().toLowerCase())) {
-            ((TextView) rowView.findViewById(R.id.sightings)).setText("I've seen it!");
+            ((TextView) convertView.findViewById(R.id.sightings)).setText("I've seen it!");
         } else {
-            ((TextView) rowView.findViewById(R.id.sightings)).setText("");
+            ((TextView) convertView.findViewById(R.id.sightings)).setText("");
         }
 
-        return rowView;
+        return convertView;
     }
 
     private void displayImage(Animal animal, ImageView imageView, Activity owner1) {

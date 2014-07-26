@@ -22,7 +22,7 @@
                 android:alpha="1">
             </RelativeLayout>
 
-            <ListView
+            <ExpandableListView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/place_to_put_list"
@@ -30,8 +30,8 @@
         </LinearLayout>
 
     </FrameLayout>
-    <ListView android:id="@+id/filters"
-              android:layout_width="240dp"
+    <ExpandableListView android:id="@+id/filters"
+              android:layout_width="300dp"
               android:layout_height="match_parent"
               android:layout_gravity="start"
               android:dividerHeight="0dp"

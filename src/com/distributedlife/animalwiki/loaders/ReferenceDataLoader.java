@@ -56,4 +56,16 @@ public class ReferenceDataLoader {
     public static String replaceCountry(String country) {
         return countries.get(country);
     }
+
+    public static String replaceOrder(String order) {
+        if (order.isEmpty()) {
+            return "Unknown";
+        }
+
+        if (orders.get(order) == null) {
+            return order;
+        } else {
+            return orders.get(order);
+        }
+    }
 }

@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:id="@+id/listItemFrame"
-                android:longClickable="true">
+                android:layout_height="48dp"
+                android:id="@+id/listItemFrame">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,20 +13,22 @@
         android:text="@string/not_found"
         android:textStyle="normal"
         android:typeface="sans"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textIsSelectable="false"
         android:layout_alignParentTop="true"
         android:singleLine="true"
         android:ellipsize="none"
-        android:layout_marginLeft="16dp"/>
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"/>
 
-    <ToggleButton
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toggle"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:isScrollContainer="false"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginRight="8dp"
+        android:checked="false"
+        android:singleLine="false"/>
 
 </RelativeLayout>

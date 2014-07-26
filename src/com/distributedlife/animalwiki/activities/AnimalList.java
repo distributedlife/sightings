@@ -3,21 +3,22 @@ package com.distributedlife.animalwiki.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 import com.distributedlife.animalwiki.R;
 import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.filters.*;
-import com.distributedlife.animalwiki.listAdapters.AnimalsAdapter;
+import com.distributedlife.animalwiki.listAdapters.AnimalsWithOrderAdapter;
 import com.distributedlife.animalwiki.listAdapters.FilterAdapter;
+import com.distributedlife.animalwiki.loaders.AnimalCommonNameComparator;
 import com.distributedlife.animalwiki.loaders.DataLoader;
 import com.distributedlife.animalwiki.loaders.ReferenceDataLoader;
 import com.distributedlife.animalwiki.model.Animal;
 import com.distributedlife.animalwiki.model.ConservationStatus;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AnimalList extends Activity {
     public static final String SEEN = "Seen";
@@ -25,8 +26,10 @@ public class AnimalList extends Activity {
     public static final String CLASS = "Class";
     private final FilterApplication filterApplication = new FilterApplication();
     private Sightings sightings;
-    private AnimalsAdapter animalsAdapter;
+    private AnimalsWithOrderAdapter animalsAdapter;
     private List<Filter> listOfFilters = new ArrayList<Filter>();
+    private DrawerLayout drawer;
+    private ExpandableListView drawerFilterList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,16 +38,81 @@ public class AnimalList extends Activity {
 
         sightings = new Sightings(this);
         loadContent();
-        buildFilterList(DataLoader.getAnimals());
+
+        List<String> orders = new ArrayList<String>();
+        Map<String, List<Animal>> allAnimals = new HashMap<String, List<Animal>>();
+
+        for (Animal animal : DataLoader.getAnimals()) {
+            String order = ReferenceDataLoader.replaceOrder(animal.getOrder());
+
+            if (!orders.contains(order)) {
+                orders.add(order);
+            }
+
+            List<Animal> orderAnimals;
+            if (allAnimals.containsKey(order)) {
+                orderAnimals = allAnimals.get(order);
+            } else {
+                orderAnimals = new ArrayList<Animal>();
+            }
+
+            orderAnimals.add(animal);
+            Collections.sort(orderAnimals, new AnimalCommonNameComparator());
+            allAnimals.put(order, orderAnimals);
+        }
+        Collections.sort(orders);
 
 
-        ((ListView) findViewById(R.id.place_to_put_list)).setAdapter(new AnimalsAdapter(this, filterApplication.apply(listOfFilters, DataLoader.getAnimals()), sightings, this));
-        animalsAdapter = (AnimalsAdapter) ((ListView) findViewById(R.id.place_to_put_list)).getAdapter();
 
 
-        ((ListView) findViewById(R.id.filters)).setAdapter(new FilterAdapter(this, listOfFilters, this));
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+
+        ((ExpandableListView) findViewById(R.id.place_to_put_list)).setAdapter(new AnimalsWithOrderAdapter(this, orders, allAnimals, sightings, this));
+//        animalsAdapter = (AnimalsWithOrderAdapter) ((ExpandableListView) findViewById(R.id.place_to_put_list)).getAdapter();
+
+        SeenFilter seenFilter = new SeenFilter(true, sightings);
+        NotSeenFilter notSeenFilter = new NotSeenFilter(true, sightings);
+
+        listOfFilters.add(seenFilter);
+        listOfFilters.add(notSeenFilter);
+
+        List<String> headers = new ArrayList<String>();
+        headers.add("Sightings");
+        headers.add("Conservation Status");
+        headers.add("Country");
+        headers.add("Class");
+//        headers.add("Order");
+
+        List<Filter> sightingsChildren = new ArrayList<Filter>();
+        sightingsChildren.add(seenFilter);
+        sightingsChildren.add(notSeenFilter);
+
+        List<Filter> conservationStatusChildren = addConservationStatusFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(conservationStatusChildren);
+
+        List<Filter> countryChildren = addCountryFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(countryChildren);
+
+        List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(classChildren);
+
+//        List<Filter> orderChildren = addOrderFilters(DataLoader.getAnimals());
+//        listOfFilters.addAll(orderChildren);
+
+        Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
+        headersAndChildren.put(headers.get(0), sightingsChildren);
+        headersAndChildren.put(headers.get(1), conservationStatusChildren);
+        headersAndChildren.put(headers.get(2), countryChildren);
+        headersAndChildren.put(headers.get(3), classChildren);
+//        headersAndChildren.put(headers.get(4), orderChildren);
+
+        drawerFilterList = (ExpandableListView) findViewById(R.id.filters);
+        drawerFilterList.setAdapter(new FilterAdapter(this, headers, headersAndChildren));
+
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View view, float v) {}
@@ -54,7 +122,7 @@ public class AnimalList extends Activity {
 
             @Override
             public void onDrawerClosed(View view) {
-                animalsAdapter.setFilter(filterApplication.apply(listOfFilters, DataLoader.getAnimals()));
+//                animalsAdapter.setFilter(filterApplication.apply(listOfFilters, DataLoader.getAnimals()));
             }
 
             @Override
@@ -64,88 +132,92 @@ public class AnimalList extends Activity {
 
     private void loadContent() {
         try {
-            DataLoader.load(getAssets().open("birds.json"));
-            DataLoader.add(getAssets().open("mammals.json"));
+            DataLoader.load(getAssets().open("animals.json"));
             ReferenceDataLoader.load(getAssets().open("reference.json"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void buildFilterList(List<Animal> animals) {
-        listOfFilters.add(new Heading("Sightings"));
-        listOfFilters.add(new SeenFilter(true, sightings));
-        listOfFilters.add(new NotSeenFilter(true, sightings));
-
-        listOfFilters.add(new Heading("Class"));
-        addClassFilters(animals);
-
-        listOfFilters.add(new Heading("Conservation Status"));
-        addConservationStatusFilters(animals);
-
-        listOfFilters.add(new Heading("Country"));
-        addCountryFilters(animals);
-
-        listOfFilters.add(new Heading("Order"));
-        addOrderFilters(animals);
-    }
-
-    private void addCountryFilters(List<Animal> animals) {
-        List<String> done = new ArrayList<String>();
-        for(Animal animal : animals) {
+    private List<Filter> addCountryFilters(List<Animal> animals) {
+        List<String> unsortedItems = new ArrayList<String>();
+        for (Animal animal : animals) {
             for (String country : animal.getCountries()) {
-                if (done.contains(country)) {
+                if (unsortedItems.contains(country)) {
                     continue;
                 }
 
-                done.add(country);
-
-                listOfFilters.add(new CountryFilter(country, true));
+                unsortedItems.add(country);
             }
         }
+
+        Collections.sort(unsortedItems);
+
+        List<ToggleFilter> toggleFilters = new ArrayList<ToggleFilter>();
+        for (String country : unsortedItems) {
+            toggleFilters.add(new CountryFilter(country, true));
+        }
+
+        List<Filter> allFilters = new ArrayList<Filter>();
+//        allFilters.add(new ZeroFilter(toggleFilters));
+        allFilters.addAll(toggleFilters);
+
+        return allFilters;
     }
 
-    private void addConservationStatusFilters(List<Animal> animals) {
-        List<ConservationStatus> done = new ArrayList<ConservationStatus>();
-        for(Animal animal : animals) {
-            if (done.contains(animal.getConservationStatus())) {
+    private List<Filter> addConservationStatusFilters(List<Animal> animals) {
+        List<ConservationStatus> unsortedItems = new ArrayList<ConservationStatus>();
+        for (Animal animal : animals) {
+            if (unsortedItems.contains(animal.getConservationStatus())) {
                 continue;
             }
 
-            done.add(animal.getConservationStatus());
-            listOfFilters.add(new ConservationStatusFilter(animal.getConservationStatus(), true));
+            unsortedItems.add(animal.getConservationStatus());
         }
+
+        Collections.sort(unsortedItems);
+
+        List<ToggleFilter> toggleFilters = new ArrayList<ToggleFilter>();
+        for (ConservationStatus conservationStatus : unsortedItems) {
+            toggleFilters.add(new ConservationStatusFilter(conservationStatus, true));
+        }
+
+        List<Filter> allFilters = new ArrayList<Filter>();
+//        allFilters.add(new ZeroFilter(toggleFilters));
+        allFilters.addAll(toggleFilters);
+
+        return allFilters;
     }
 
-    private void addOrderFilters(List<Animal> animals) {
-        List<String> done = new ArrayList<String>();
-        for(Animal animal : animals) {
-            if (done.contains(animal.getOrder())) {
+    private List<Filter> addClassFilters(List<Animal> animals) {
+        List<String> unsortedItems = new ArrayList<String>();
+        for (Animal animal : animals) {
+            if (unsortedItems.contains(animal.getKlass())) {
                 continue;
             }
 
-            done.add(animal.getOrder());
-            listOfFilters.add(new OrderFilter(animal.getOrder(), true));
+            unsortedItems.add(animal.getKlass());
         }
-    }
 
-    private void addClassFilters(List<Animal> animals) {
-        List<String> done = new ArrayList<String>();
-        for(Animal animal : animals) {
-            if (done.contains(animal.getKlass())) {
-                continue;
-            }
+        Collections.sort(unsortedItems);
 
-            done.add(animal.getKlass());
-            listOfFilters.add(new ClassFilter(animal.getKlass(), true));
+        List<ToggleFilter> toggleFilters = new ArrayList<ToggleFilter>();
+        for (String klass : unsortedItems) {
+            toggleFilters.add(new ClassFilter(klass, true));
         }
+
+        List<Filter> allFilters = new ArrayList<Filter>();
+//        allFilters.add(new ZeroFilter(toggleFilters));
+        allFilters.addAll(toggleFilters);
+
+        return allFilters;
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        animalsAdapter.notifyDataSetChanged();
+//        animalsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -153,5 +225,24 @@ public class AnimalList extends Activity {
         super.onDestroy();
 
         sightings.close();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent e) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (drawer == null) {
+                return super.onKeyDown(keyCode, e);
+            }
+
+            if (drawer.isDrawerOpen(drawerFilterList)) {
+                drawer.closeDrawer(drawerFilterList);
+            } else {
+                drawer.openDrawer(drawerFilterList);
+            }
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, e);
     }
 }

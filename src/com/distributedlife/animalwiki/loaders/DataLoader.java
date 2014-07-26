@@ -60,6 +60,8 @@ public class DataLoader {
         } catch (JSONException e) {
             throw new RuntimeException("JSON exception", e);
         }
+
+        Collections.sort(animals, new AnimalCommonNameComparator());
     }
 
     public static void load(InputStream inputStream) {

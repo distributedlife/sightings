@@ -61,7 +61,7 @@ public class AnimalDisplay extends Activity {
                         Drawable d = Drawable.createFromStream(ims, null);
                         imageView.setImageDrawable(d);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        imageView.setImageResource(R.drawable.ic_launcher);
                     }
                 }
 
@@ -78,9 +78,9 @@ public class AnimalDisplay extends Activity {
                         findViewById(AnimalFormatting.swatches().get(i)).setVisibility(View.GONE);
                         continue;
                     }
-                    if (colour.equals("white")) {
-                        continue;
-                    }
+//                    if (colour.equals("white")) {
+//                        continue;
+//                    }
 
                     findViewById(AnimalFormatting.swatches().get(i)).setBackgroundColor(Color.parseColor(colour));
                 }
