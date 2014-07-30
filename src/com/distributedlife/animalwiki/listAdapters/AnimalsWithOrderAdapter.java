@@ -2,6 +2,7 @@ package com.distributedlife.animalwiki.listAdapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.distributedlife.animalwiki.R;
 import com.distributedlife.animalwiki.clickaction.OpenElement;
-import com.distributedlife.animalwiki.clickaction.ToggleSeenIt;
 import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.formatting.AnimalFormatting;
 import com.distributedlife.animalwiki.model.Animal;
@@ -151,7 +151,7 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.filter_heading, null);
+            convertView = layoutInflater.inflate(R.layout.order_heading, null);
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.label);
@@ -164,29 +164,43 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         Animal animal = (Animal) getChild(groupPosition, childPosition);
+
+        AnimalListViewHolder holder;
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.animal_list_item, parent, false);
+
+            holder = new AnimalListViewHolder();
+            holder.setLabel((TextView) convertView.findViewById(R.id.label));
+            holder.setConservationStatus((TextView) convertView.findViewById(R.id.conservationStatus));
+            holder.setImage((ImageView) convertView.findViewById(R.id.imageIcon));
+            holder.setOfficialName((TextView) convertView.findViewById(R.id.officialName));
+
+            convertView.setTag(holder);
+        } else {
+            holder = (AnimalListViewHolder) convertView.getTag();
         }
 
         convertView.setOnClickListener(new OpenElement(animal.getWikiFileName(), owner));
-        convertView.setOnLongClickListener(new ToggleSeenIt(animal.getCommonName(), owner));
 
-        ((TextView) convertView.findViewById(R.id.label)).setText(animal.getCommonName());
+        holder.getLabel().setText(animal.getCommonName());
 
-        TextView conservationStatus = (TextView) convertView.findViewById(R.id.conservationStatus);
+        TextView conservationStatus = holder.getConservationStatus();
         conservationStatus.setText(animal.getConservationStatus().toAbbreviation());
         conservationStatus.setTextColor(AnimalFormatting.getTextColourForConservationStatus(animal.getConservationStatus()));
         conservationStatus.setBackgroundColor(AnimalFormatting.getBackgroundColourForConservationStatus(animal.getConservationStatus()));
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageIcon);
+        ImageView imageView = holder.getImage();
         displayImage(animal, imageView, owner);
 
+        holder.getOfficialName().setText(animal.getOfficialName());
+        holder.getOfficialName().setTypeface(null, Typeface.ITALIC);
 
-        if (sightings.hasSighting(animal.getCommonName().toLowerCase())) {
-            ((TextView) convertView.findViewById(R.id.sightings)).setText("I've seen it!");
+        if (sightings.hasSighting(animal.getCommonName())) {
+            convertView.findViewById(R.id.animalFrame).setBackgroundColor(Color.WHITE);
         } else {
-            ((TextView) convertView.findViewById(R.id.sightings)).setText("");
+            convertView.findViewById(R.id.animalFrame).setBackgroundResource(R.color.backgroundAnimalNotSighted);
         }
 
         return convertView;
@@ -195,5 +209,44 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    private static class AnimalListViewHolder {
+        private TextView label;
+        private TextView conservationStatus;
+        private ImageView image;
+        private TextView officialName;
+
+        public void setLabel(TextView label) {
+            this.label = label;
+        }
+
+        public void setConservationStatus(TextView conservationStatus) {
+            this.conservationStatus = conservationStatus;
+        }
+
+        public void setImage(ImageView image) {
+            this.image = image;
+        }
+
+        public void setOfficialName(TextView officialName) {
+            this.officialName = officialName;
+        }
+
+        public TextView getLabel() {
+            return this.label;
+        }
+
+        public TextView getConservationStatus() {
+            return conservationStatus;
+        }
+
+        public ImageView getImage() {
+            return image;
+        }
+
+        public TextView getOfficialName() {
+            return officialName;
+        }
     }
 }

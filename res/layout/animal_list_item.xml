@@ -2,144 +2,62 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:id="@+id/listItemFrame"
-                android:longClickable="true">
+                android:layout_height="48dp"
+                android:id="@+id/animalFrame"
+                android:longClickable="true"
+                android:background="@color/backgroundAnimalNotSighted">
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:id="@+id/imageIcon"
-        android:layout_margin="8dp"
         android:src="@drawable/ic_launcher"
-        android:cropToPadding="true"/>
+        android:cropToPadding="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/animalListImageContentDescription"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/label"
-        android:textColor="@color/text"
-        android:text="@string/not_found"
+        android:text="@string/dummyAnimalCommonName"
         android:textStyle="normal"
-        android:typeface="sans"
-        android:textSize="20dp"
         android:textIsSelectable="false"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageIcon"
-        android:singleLine="true"
+        android:singleLine="false"
         android:ellipsize="none"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:background="#ff0000"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="2dp"/>
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch2"
-        android:background="#ff0000"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/swatch1"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="2dp"/>
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch3"
-        android:background="#ff0000"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/swatch2"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="2dp"/>
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch4"
-        android:background="#ff0000"
-        android:layout_marginRight="4dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/swatch3"
-        android:layout_marginTop="2dp"/>
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch5"
-        android:background="#ff0000"
-        android:layout_marginRight="4dp"
-        android:layout_alignTop="@+id/swatch4"
-        android:layout_toLeftOf="@+id/swatch4"
-        />
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch6"
-        android:background="#ff0000"
-        android:layout_marginRight="4dp"
-        android:layout_alignTop="@+id/swatch5"
-        android:layout_toLeftOf="@+id/swatch5"
-        />
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch7"
-        android:background="#ff0000"
-        android:layout_marginRight="4dp"
-        android:layout_alignTop="@+id/swatch6"
-        android:layout_toLeftOf="@+id/swatch6"
-        />
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch8"
-        android:background="#ff0000"
-        android:layout_alignTop="@+id/swatch7"
-        android:layout_toLeftOf="@+id/swatch7"
-        android:layout_marginRight="4dp"
-        />
-
-    <TextView
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:id="@+id/swatch9"
-        android:background="#ff0000"
-        android:layout_marginRight="4dp"
-        android:layout_alignTop="@+id/swatch8"
-        android:layout_toLeftOf="@+id/swatch8"/>
+        android:layout_marginTop="4dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/primary_text_light"/>
 
     <TextView
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:text="EW"
+        android:text="@string/dummyConservationStatus"
         android:id="@+id/conservationStatus"
-        android:textSize="20dp"
         android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:gravity="center|center_vertical|center_horizontal"
-        android:layout_marginRight="8dp"/>
+        android:textColor="@android:color/secondary_text_light"
+        android:layout_marginRight="8dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I've seen it!"
-        android:id="@+id/sightings"
+        android:text="@string/dummyOfficialName"
+        android:id="@+id/officialName"
         android:textStyle="italic"
-        android:paddingBottom="0dp"
         android:layout_below="@+id/label"
-        android:layout_alignLeft="@+id/label"/>
+        android:layout_alignLeft="@+id/label"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp"/>
 
 </RelativeLayout>

@@ -78,11 +78,11 @@ public class AnimalsAdapter extends ArrayAdapter<Animal> {
         displayImage(animal, imageView, owner);
 
 
-        if (sightings.hasSighting(animal.getCommonName().toLowerCase())) {
-            ((TextView) convertView.findViewById(R.id.sightings)).setText("I've seen it!");
-        } else {
-            ((TextView) convertView.findViewById(R.id.sightings)).setText("");
-        }
+//        if (sightings.hasSighting(animal.getCommonName().toLowerCase())) {
+//            ((TextView) convertView.findViewById(R.id.sightings)).setText("I've seen it!");
+//        } else {
+//            ((TextView) convertView.findViewById(R.id.sightings)).setText("");
+//        }
 
         return convertView;
     }

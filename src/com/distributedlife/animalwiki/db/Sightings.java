@@ -84,7 +84,7 @@ public class Sightings extends SQLiteOpenHelper {
     }
 
     private String tidy(String text) {
-        return text.replaceAll("'", "%27");
+        return text.replaceAll("'", "%27").toLowerCase();
     }
 
     public boolean hasSighting(String what) {

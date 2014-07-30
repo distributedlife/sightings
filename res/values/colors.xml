@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text">#000</color>
-    <color name="white">#fff</color>
-    <color name="orange">#ff9944</color>
+    <color name="backgroundAnimalNotSighted">#ddd</color>
+    <color name="conservationStatusBackground_DataDeficient">#fff</color>
+    <color name="conservationStatusBackground_NotEvaluated">#fff</color>
+    <color name="conservationStatusBackground_LeastConcern">#00f</color>
+    <color name="conservationStatusBackground_NearThreatened">#0f0</color>
+    <color name="conservationStatusBackground_Vulnerable">#ffff00</color>
+    <color name="conservationStatusBackground_Endangered">#ff6600</color>
+    <color name="conservationStatusBackground_CriticallyEndangered">#f00</color>
+    <color name="conservationStatusBackground_ExtinctInWild">#000</color>
+    <color name="conservationStatusBackground_Extinct">#fff</color>
+    <color name="conservationStatusText_DataDeficient">#000</color>
+    <color name="conservationStatusText_NotEvaluated">#000</color>
+    <color name="conservationStatusText_LeastConcern">#fff</color>
+    <color name="conservationStatusText_NearThreatened">#000</color>
+    <color name="conservationStatusText_Vulnerable">#000</color>
+    <color name="conservationStatusText_Endangered">#fff</color>
+    <color name="conservationStatusText_CriticallyEndangered">#fff</color>
+    <color name="conservationStatusText_ExtinctInWild">#fff</color>
+    <color name="conservationStatusText_Extinct">#000</color>
 </resources>

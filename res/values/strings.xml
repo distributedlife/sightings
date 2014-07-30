@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Sightings</string>
     <string name="not_found">Abyssian Crimsonwing</string>
+    <string name="dummyOfficialName">Proteles cristata</string>
+    <string name="dummyConservationStatus">EW</string>
+    <string name="animalListImageContentDescription">Thumbnail of animal</string>
+    <string name="dummyAnimalCommonName">Pied Crow</string>
 </resources>
