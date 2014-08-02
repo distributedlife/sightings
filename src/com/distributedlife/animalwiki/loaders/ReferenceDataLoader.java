@@ -13,15 +13,13 @@ public class ReferenceDataLoader {
     static java.util.Map<String, String> klasses;
     static java.util.Map<String, String> countries;
     static java.util.Map<String, String> orders;
+    static java.util.Map<String, String> families;
 
     public static void load(InputStream jsonFile) {
-        klasses = new HashMap<String, String>();
-        countries = new HashMap<String, String>();
-        orders = new HashMap<String, String>();
-
         try {
             JSONObject root = new JSONObject(IOUtils.toString(jsonFile));
 
+            klasses = new HashMap<String, String>();
             JSONObject klass = root.getJSONObject("klass");
             Iterator klassItr = klass.keys();
             while(klassItr.hasNext()) {
@@ -29,6 +27,7 @@ public class ReferenceDataLoader {
                 klasses.put(key, klass.getString(key));
             }
 
+            orders = new HashMap<String, String>();
             JSONObject order = root.getJSONObject("order");
             Iterator orderItr = order.keys();
             while(orderItr.hasNext()) {
@@ -36,6 +35,15 @@ public class ReferenceDataLoader {
                 orders.put(key, order.getString(key));
             }
 
+            families = new HashMap<String, String>();
+            JSONObject families = root.getJSONObject("family");
+            Iterator familiesItr = families.keys();
+            while(familiesItr.hasNext()) {
+                String key = (String) familiesItr.next();
+                families.put(key, families.getString(key));
+            }
+
+            countries = new HashMap<String, String>();
             JSONObject country = root.getJSONObject("countries");
             Iterator countryItr = country.keys();
             while(countryItr.hasNext()) {
@@ -62,10 +70,22 @@ public class ReferenceDataLoader {
             return "Unknown";
         }
 
-        if (orders.get(order) == null) {
-            return order;
-        } else {
+        if (orders.containsKey(order)) {
             return orders.get(order);
+        } else {
+            return order;
+        }
+    }
+
+    public static String replaceFamily(String family) {
+        if (family.isEmpty()) {
+            return "Unknown";
+        }
+
+        if (families.containsKey(family)) {
+            return families.get(family);
+        } else {
+            return family;
         }
     }
 }

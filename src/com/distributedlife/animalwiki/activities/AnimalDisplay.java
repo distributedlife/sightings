@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class AnimalDisplay extends Activity {
-
     private String commonNameFromFileName;
+    private static Sightings sightings = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +78,6 @@ public class AnimalDisplay extends Activity {
                         findViewById(AnimalFormatting.swatches().get(i)).setVisibility(View.GONE);
                         continue;
                     }
-//                    if (colour.equals("white")) {
-//                        continue;
-//                    }
 
                     findViewById(AnimalFormatting.swatches().get(i)).setBackgroundColor(Color.parseColor(colour));
                 }
@@ -107,13 +104,16 @@ public class AnimalDisplay extends Activity {
     }
 
     private void updateAfterSightingChange(String what) {
-        Sightings sightings = new Sightings(this);
+        if (sightings == null) {
+            sightings = new Sightings(this);
+        }
+
         if (sightings.hasSighting(what)) {
             ((Button) findViewById(R.id.sighting)).setText("Remove Seen It Flag");
-            findViewById(R.id.sighting).setOnClickListener(new RemoveSeenIt(this, what));
+            findViewById(R.id.sighting).setOnClickListener(new RemoveSeenIt(this, sightings, what));
         } else {
             ((Button) findViewById(R.id.sighting)).setText("I've Seen It");
-            findViewById(R.id.sighting).setOnClickListener(new SeenIt(this, what));
+            findViewById(R.id.sighting).setOnClickListener(new SeenIt(this, sightings, what));
         }
     }
 

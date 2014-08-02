@@ -1,130 +1,114 @@
 package com.distributedlife.animalwiki.db;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import com.couchbase.lite.*;
+import com.couchbase.lite.android.AndroidContext;
 import com.distributedlife.animalwiki.model.Sighting;
-import org.apache.commons.lang3.StringUtils;
 
-public class Sightings extends SQLiteOpenHelper {
-    private static final String NAME = "sightings";
-    private static final String ID = "id" ;
-    private static final String WHAT = "what" ;
-//    private static final String WHEN = "timestamp" ;
-//    private static final String WHERE = "location" ;
-//    private static final String TYPE = "type" ;
-//    private static final String PHOTO = "photo";
-    private static final String LAST_UPDATED = "last_updated";
-    public static final String TIMESTAMP_PATTERN = "YYYY-MM-DD HH:mm:ss.SSSZ";
-    private static final int VERSION = 1;
-    private static String[] CREATE_COLUMNS = new String[] {
-        "id INTEGER PRIMARY KEY AUTOINCREMENT",
-        "what TEXT NOT NULL"
-    };
-    private static final String[] INSERT_COLUMNS = new String[] {WHAT};
-    private static final String[] ALL_COLUMNS = new String[] {ID, WHAT};
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Sightings {
+    private static final String TAG = "Sightings";
+
+    private Manager manager;
+    private Database database;
+    private List<Sighting> sightingCache;
+    public static final String NAME = "sightings";
 
     public Sightings(Context context) {
-        super(context, NAME, null, VERSION);
+        sightingCache = new ArrayList<Sighting>();
+
+        try {
+            manager = new Manager(new AndroidContext(context), Manager.DEFAULT_OPTIONS);
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot create manager object");
+            return;
+        }
+
+        if (!Manager.isValidDatabaseName(NAME)) {
+            Log.e(TAG, "Bad database name");
+            return;
+        }
+
+        try {
+            database = manager.getDatabase(NAME);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Cannot get database");
+            return;
+        }
+
+        try {
+            Map<String, Object> retrievedDocument = database.getAllDocs(new QueryOptions());
+            List<QueryRow> queryRows = (List<QueryRow>) retrievedDocument.get("rows");
+            for (QueryRow queryRow: queryRows) {
+                Document document = queryRow.getDocument();
+                Map<String, Object> properties = document.getProperties();
+
+                String id = document.getId();
+                String what = (String) properties.get("what");
+
+                sightingCache.add(new Sighting(id, what));
+            }
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
-    public void add(Sighting sighting) {
-        getWritableDatabase().execSQL(
-                insert(sighting.getWhat())
-        );
+    public void add(String what) {
+        Sighting sighting = new Sighting(what);
+        Map<String, Object> docContent = convertSightingToMap(sighting);
+
+        Document document = database.createDocument();
+
+        try {
+            document.putProperties(docContent);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, "Cannot write document to database", e);
+            return;
+        }
+
+        sighting.setId(document.getId());
+        sightingCache.add(sighting);
     }
 
-//    @Override
-//    public void update(Sighting sighting) {
-//        DateTimeParser parser = DateTimeFormat.forPattern(TIMESTAMP_PATTERN).getParser();
-//        DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(parser).toFormatter();
-//
-//        String sql = String.format("UPDATE %s SET what = '%s', WHERE id = %d;",
-//                NAME,
-//                sighting.getWhat()
-//        );
-//        getWritableDatabase().execSQL(sql);
-//    }
+    private Map<String, Object> convertSightingToMap(Sighting sighting) {
+        Map<String, Object> docContent = new HashMap<String, Object>();
+        docContent.put("what", sighting.getWhat());
 
-//    private java.util.AnimalList<Sighting> getAll() {
-//        java.util.AnimalList<Sighting> sightings = new ArrayList<Sighting>();
-//
-//        Cursor cursor = getReadableDatabase().query(NAME, ALL_COLUMNS, null, null, null, null, null);
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            sightings.add(mapToSighting(cursor));
-//
-//            cursor.moveToNext();
-//        }
-//
-//        cursor.close();
-//        return sightings;
-//    }
-
-    @Override
-    public void onCreate(SQLiteDatabase database) {
-        database.execSQL(create());
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {}
-
-    private static String create() {
-        return "CREATE TABLE" + " " + NAME + " " + "(" + StringUtils.join(CREATE_COLUMNS, ", ") + ")" + ";";
-    }
-
-    private String insert(String what) {
-//        DateTimeParser parser = DateTimeFormat.forPattern(TIMESTAMP_PATTERN).getParser();
-//        DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(parser).toFormatter();
-
-        String columns = StringUtils.join(INSERT_COLUMNS, ", ");
-
-        return String.format("INSERT INTO %s (%s) VALUES ('%s');", NAME, columns, tidy(what));
+        return docContent;
     }
 
     private String tidy(String text) {
         return text.replaceAll("'", "%27").toLowerCase();
     }
 
-    public boolean hasSighting(String what) {
-        //TODO: use selection arguments
-        Cursor cursor = getReadableDatabase().query(NAME, ALL_COLUMNS, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Sighting sighting = mapToSighting(cursor);
-
+    public Sighting getSighting(String what) {
+        for (Sighting sighting : sightingCache) {
             if (sighting.getWhat().equals(tidy(what))) {
-                return true;
+                return sighting;
             }
-
-            cursor.moveToNext();
         }
 
-        cursor.close();
-
-        return false;
+        return null;
     }
 
-    private Sighting mapToSighting(Cursor cursor) {
-//        DateTimeParser parser = DateTimeFormat.forPattern(TIMESTAMP_PATTERN).getParser();
-//        DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(parser).toFormatter();
-
-        return new Sighting(
-                cursor.getInt(0),
-                cursor.getString(1)
-//                catalogue.find(cursor.getInt(1)),
-//                DateTime.parse(cursor.getString(2), formatter),
-//                cursor.getInt(3),
-//                cursor.getInt(4)
-        );
+    public boolean hasSighting(String what) {
+        return (getSighting(what) != null);
     }
 
-    public void remove(Sighting sighting) {
-        getWritableDatabase().delete(
-                NAME,
-                "what = ?",
-                new String[] {tidy(sighting.getWhat())}
-        );
+    public void remove(String what) {
+        try {
+            Sighting sighting = getSighting(what);
+            database.getDocument(sighting.getId()).delete();
+            sightingCache.remove(sighting);
+        } catch (CouchbaseLiteException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
     }
 }

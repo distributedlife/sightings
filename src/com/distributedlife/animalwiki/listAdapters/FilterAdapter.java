@@ -5,10 +5,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.Switch;
-import android.widget.TextView;
+import android.widget.*;
 import com.distributedlife.animalwiki.R;
 import com.distributedlife.animalwiki.clickaction.ToggleFilterAction;
 import com.distributedlife.animalwiki.clickaction.ZeroFilterList;
@@ -87,22 +84,22 @@ public class FilterAdapter extends BaseExpandableListAdapter {
 
         Filter filter = (Filter) getChild(groupPosition, childPosition);
         if (filter instanceof ToggleFilter) {
-            if (convertView == null) {
+//            if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.filter_pick_item, null);
-            }
+//            }
 
             ToggleFilter toggleFilter = (ToggleFilter) filter;
 
             ((TextView) convertView.findViewById(R.id.label)).setText(toggleFilter.getName());
 
-            Switch toggle = (Switch) convertView.findViewById(R.id.toggle);
+            CheckBox toggle = (CheckBox) convertView.findViewById(R.id.toggle);
             toggle.setChecked(toggleFilter.getValue());
             toggle.setOnCheckedChangeListener(new ToggleFilterAction(toggleFilter));
         }
         if (filter instanceof ZeroFilter) {
-            if (convertView == null) {
+//            if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.filter_reset_all, null);
-            }
+//            }
 
             ZeroFilter zeroFilter = (ZeroFilter) filter;
 

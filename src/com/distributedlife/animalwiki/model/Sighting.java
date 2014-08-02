@@ -1,20 +1,36 @@
 package com.distributedlife.animalwiki.model;
 
-public class Sighting {
-    private int id;
-    private String what;
+import org.joda.time.DateTime;
 
-    public Sighting(int id, String what) {
+public class Sighting {
+    private String id;
+    private String what;
+    private DateTime when;
+
+    public Sighting(String id, String what) {
         this.id = id;
         this.what = what;
     }
 
     public Sighting(String what) {
-        this.id = 0;
+        this.id = null;
         this.what = what;
+        this.when = DateTime.now();
     }
 
     public String getWhat() {
         return what;
+    }
+
+    public DateTime getWhen() {
+        return when;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

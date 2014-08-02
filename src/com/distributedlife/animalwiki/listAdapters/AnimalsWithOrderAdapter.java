@@ -2,7 +2,6 @@ package com.distributedlife.animalwiki.listAdapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -24,8 +23,8 @@ import java.util.Map;
 
 public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
     private final Context context;
-    private final List<String> headers;
-    private final Map<String, List<Animal>> animals;
+    private List<String> headers;
+    private Map<String, List<Animal>> animals;
     private List<Animal> allAnimals;
     private Sightings sightings;
     private Activity owner;
@@ -104,10 +103,10 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    public void setFilter(List<Animal> filteredAnimals) {
-//        this.clear();
-//        this.addAll(filteredAnimals);
-//        this.notifyDataSetChanged();
+    public void setFilter(List<String> headers, Map<String, List<Animal>> animals) {
+        this.headers = headers;
+        this.animals = animals;
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -176,6 +175,7 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
             holder.setConservationStatus((TextView) convertView.findViewById(R.id.conservationStatus));
             holder.setImage((ImageView) convertView.findViewById(R.id.imageIcon));
             holder.setOfficialName((TextView) convertView.findViewById(R.id.officialName));
+            holder.setAnimalFrame(convertView.findViewById(R.id.animalFrame));
 
             convertView.setTag(holder);
         } else {
@@ -198,9 +198,9 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
         holder.getOfficialName().setTypeface(null, Typeface.ITALIC);
 
         if (sightings.hasSighting(animal.getCommonName())) {
-            convertView.findViewById(R.id.animalFrame).setBackgroundColor(Color.WHITE);
+            holder.getAnimalFrame().setBackgroundResource(R.color.backgroundAnimalSighted);
         } else {
-            convertView.findViewById(R.id.animalFrame).setBackgroundResource(R.color.backgroundAnimalNotSighted);
+            holder.getAnimalFrame().setBackgroundResource(R.color.backgroundAnimalNotSighted);
         }
 
         return convertView;
@@ -216,6 +216,7 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
         private TextView conservationStatus;
         private ImageView image;
         private TextView officialName;
+        private View animalFrame;
 
         public void setLabel(TextView label) {
             this.label = label;
@@ -247,6 +248,14 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
 
         public TextView getOfficialName() {
             return officialName;
+        }
+
+        public void setAnimalFrame(View animalFrame) {
+            this.animalFrame = animalFrame;
+        }
+
+        public View getAnimalFrame() {
+            return animalFrame;
         }
     }
 }
