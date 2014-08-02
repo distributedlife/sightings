@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="backgroundAnimalNotSighted">#ddd</color>
+    <color name="backgroundAnimalSighted">#fff</color>
     <color name="conservationStatusBackground_DataDeficient">#fff</color>
     <color name="conservationStatusBackground_NotEvaluated">#fff</color>
     <color name="conservationStatusBackground_LeastConcern">#00f</color>

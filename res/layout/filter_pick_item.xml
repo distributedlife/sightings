@@ -18,9 +18,9 @@
         android:layout_alignParentTop="true"
         android:singleLine="true"
         android:ellipsize="none"
-        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"/>
+        android:paddingLeft="8dp"/>
 
-    <Switch
+    <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toggle"

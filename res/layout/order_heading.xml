@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/listItemFrame">
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="48dp "
+        android:layout_height="72dp "
         android:id="@+id/label"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textColor="@android:color/primary_text_light"
