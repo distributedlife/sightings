@@ -20,4 +20,5 @@
     <color name="conservationStatusText_CriticallyEndangered">#fff</color>
     <color name="conservationStatusText_ExtinctInWild">#fff</color>
     <color name="conservationStatusText_Extinct">#000</color>
+    <color name="endemic">#abc</color>
 </resources>

@@ -26,6 +26,19 @@
             android:textStyle="bold"
             android:gravity="center_horizontal"/>
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Endemic to "
+            android:id="@+id/endemic"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:background="@color/endemic"
+            android:layout_marginTop="8dp"/>
+
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">

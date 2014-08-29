@@ -184,7 +184,11 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
 
         convertView.setOnClickListener(new OpenElement(animal, owner));
 
-        holder.getLabel().setText(animal.getCommonName());
+        if (animal.isEndemic()) {
+            holder.getLabel().setText(String.format("*%s", animal.getCommonName()));
+        } else {
+            holder.getLabel().setText(animal.getCommonName());
+        }
 
         TextView conservationStatus = holder.getConservationStatus();
         conservationStatus.setText(animal.getConservationStatus().toAbbreviation());

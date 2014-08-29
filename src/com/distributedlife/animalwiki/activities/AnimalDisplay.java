@@ -89,6 +89,12 @@ public class AnimalDisplay extends Activity {
         family.setText(animal.getFamily());
         genus.setText(animal.getGenus());
 
+        if (animal.isEndemic()) {
+            ((TextView) findViewById(R.id.endemic)).setText(String.format("Endemic to %s", animal.getCountries().get(0)));
+        } else {
+            findViewById(R.id.endemic).setVisibility(View.INVISIBLE);
+        }
+
         updateAfterSightingChange(animal);
     }
 

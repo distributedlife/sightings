@@ -261,4 +261,8 @@ public class Animal {
     public String getKey() {
         return officialName.replaceAll(" ", "_").toLowerCase();
     }
+
+    public boolean isEndemic() {
+        return endemic;
+    }
 }
