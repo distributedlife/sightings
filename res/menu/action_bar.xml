@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/sightings"
-          android:icon="@drawable/ic_launcher"
-          android:title="@string/sightings"
-          android:showAsAction="ifRoom"/>
     <item android:id="@+id/expandCollapse"
           android:icon="@drawable/ic_action_expand"
           android:title="Expand / Collapse All"
+          android:showAsAction="ifRoom"/>
+    <item android:id="@+id/sightings"
+          android:icon="@drawable/ic_launcher"
+          android:title="@string/sightings"
           android:showAsAction="ifRoom"/>
 </menu>

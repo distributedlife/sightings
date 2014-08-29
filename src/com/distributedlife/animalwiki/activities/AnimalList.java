@@ -44,6 +44,13 @@ public class AnimalList extends Activity {
 
             if (animal == null) {
                 Log.e("Sightings", "Missing animal in RowDisplayAdapter: " + sighting.getWhat());
+                for(Animal candidate : DataLoader.getAnimals()) {
+                    if (candidate.getCommonName().toLowerCase().equals(sighting.getWhat())) {
+//                        sighting.setWhat(animal.getKey());
+//                        sightings.update(sighting);
+                        break;
+                    }
+                }
             }
         }
 
@@ -58,11 +65,14 @@ public class AnimalList extends Activity {
         listOfFilters.add(seenFilter);
         listOfFilters.add(notSeenFilter);
 
+
+
         List<String> headers = new ArrayList<String>();
         headers.add("Sightings");
         headers.add("Conservation Status");
         headers.add("Country");
         headers.add("Class");
+        headers.add("Endemic");
 
         List<Filter> sightingsChildren = new ArrayList<Filter>();
         sightingsChildren.add(seenFilter);
@@ -77,11 +87,15 @@ public class AnimalList extends Activity {
         List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
         listOfFilters.addAll(classChildren);
 
+        List<Filter> endemicChildren = addEndemicFilters();
+        listOfFilters.addAll(endemicChildren);
+
         Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
         headersAndChildren.put(headers.get(0), sightingsChildren);
         headersAndChildren.put(headers.get(1), conservationStatusChildren);
         headersAndChildren.put(headers.get(2), countryChildren);
         headersAndChildren.put(headers.get(3), classChildren);
+        headersAndChildren.put(headers.get(4), endemicChildren);
 
         drawerFilterList = (ExpandableListView) findViewById(R.id.filters);
         drawerFilterList.setAdapter(new FilterAdapter(this, headers, headersAndChildren));
@@ -105,6 +119,14 @@ public class AnimalList extends Activity {
             @Override
             public void onDrawerStateChanged(int i) {}
         });
+    }
+
+    private List<Filter> addEndemicFilters() {
+        List<Filter> endemicChildren = new ArrayList<Filter>();
+
+        endemicChildren.add(new ShowEndemicOnlyFilter());
+
+        return endemicChildren;
     }
 
     private void loadContent() {
