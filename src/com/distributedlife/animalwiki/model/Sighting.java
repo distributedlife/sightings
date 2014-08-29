@@ -7,9 +7,10 @@ public class Sighting {
     private String what;
     private DateTime when;
 
-    public Sighting(String id, String what) {
+    public Sighting(String id, String what, DateTime when) {
         this.id = id;
         this.what = what;
+        this.when = when;
     }
 
     public Sighting(String what) {

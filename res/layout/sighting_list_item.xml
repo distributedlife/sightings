@@ -30,23 +30,9 @@
         android:singleLine="false"
         android:ellipsize="none"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:textSize="18sp"
         android:textColor="@android:color/primary_text_light"/>
-
-    <TextView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:text="@string/dummyConservationStatus"
-        android:id="@+id/conservationStatus"
-        android:textStyle="bold"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:gravity="center|center_vertical|center_horizontal"
-        android:textColor="@android:color/secondary_text_light"
-        android:layout_marginRight="8dp"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,6 +44,19 @@
         android:layout_alignLeft="@+id/label"
         android:textColor="@android:color/secondary_text_light"
         android:textSize="12sp"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="8dp"/>
+
+    <ImageButton
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/removeSighting"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:focusableInTouchMode="false"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_action_cancel"
+        android:layout_margin="4dp"
+        android:cropToPadding="false"
+        android:contentDescription="Remove sighting"/>
 
 </RelativeLayout>

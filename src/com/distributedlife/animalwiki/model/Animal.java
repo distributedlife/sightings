@@ -257,4 +257,8 @@ public class Animal {
     public List<String> getCountries() {
         return countries;
     }
+
+    public String getKey() {
+        return officialName.replaceAll(" ", "_").toLowerCase();
+    }
 }

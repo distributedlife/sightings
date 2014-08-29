@@ -182,7 +182,7 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
             holder = (AnimalListViewHolder) convertView.getTag();
         }
 
-        convertView.setOnClickListener(new OpenElement(animal.getWikiFileName(), owner));
+        convertView.setOnClickListener(new OpenElement(animal, owner));
 
         holder.getLabel().setText(animal.getCommonName());
 
@@ -197,7 +197,7 @@ public class AnimalsWithOrderAdapter extends BaseExpandableListAdapter {
         holder.getOfficialName().setText(animal.getOfficialName());
         holder.getOfficialName().setTypeface(null, Typeface.ITALIC);
 
-        if (sightings.hasSighting(animal.getCommonName())) {
+        if (sightings.hasSighting(animal)) {
             holder.getAnimalFrame().setBackgroundResource(R.color.backgroundAnimalSighted);
         } else {
             holder.getAnimalFrame().setBackgroundResource(R.color.backgroundAnimalNotSighted);

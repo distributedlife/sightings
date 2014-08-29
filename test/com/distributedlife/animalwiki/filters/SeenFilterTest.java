@@ -24,28 +24,28 @@ public class SeenFilterTest {
 
     @Test
     public void whenEnabledShouldNotExcludeIfAnimalHasSighting() {
-        when(sightings.hasSighting("animal")).thenReturn(true);
+        when(sightings.hasSighting(animal)).thenReturn(true);
 
         assertEquals(new SeenFilter(true, sightings).exclude(animal), false);
     }
 
     @Test
     public void whenEnabledShouldNotExcludeIfAnimalHasNoSightings() {
-        when(sightings.hasSighting("animal")).thenReturn(false);
+        when(sightings.hasSighting(animal)).thenReturn(false);
 
         assertEquals(new SeenFilter(true, sightings).exclude(animal), false);
     }
 
     @Test
     public void whenDisabledShouldExcludeIfAnimalHasSighting() {
-        when(sightings.hasSighting("animal")).thenReturn(true);
+        when(sightings.hasSighting(animal)).thenReturn(true);
 
         assertEquals(new SeenFilter(false, sightings).exclude(animal), true);
     }
 
     @Test
     public void whenDisabledShouldNotExcludeIfAnimalHasNoSighting() {
-        when(sightings.hasSighting("animal")).thenReturn(false);
+        when(sightings.hasSighting(animal)).thenReturn(false);
 
         assertEquals(new SeenFilter(false, sightings).exclude(animal), false);
     }

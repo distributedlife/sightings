@@ -2,6 +2,7 @@ package com.distributedlife.animalwiki.loaders;
 
 import com.distributedlife.animalwiki.model.Animal;
 import com.distributedlife.animalwiki.model.ConservationStatus;
+import com.distributedlife.animalwiki.sorting.AnimalCommonNameComparator;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class DataLoader {
     static List<Animal> animals = new ArrayList<Animal>();
+    private static HashMap<String, Animal> animalsAsHash = new HashMap<String, Animal>();
 
     public static void add(InputStream inputStream) {
         try {
@@ -37,7 +39,7 @@ public class DataLoader {
                     countries = new ArrayList<String>();
                 }
 
-                DataLoader.animals.add(new Animal(
+                Animal inflatedAnimal = new Animal(
                         animal.getString("common_name"),
                         animal.getString("official_name"),
                         animal.getString("phylum"),
@@ -52,7 +54,10 @@ public class DataLoader {
                         colours,
                         countries,
                         animal.has("endemic") ? animal.getBoolean("endemic") : false
-                ));
+                );
+                DataLoader.animals.add(inflatedAnimal);
+                DataLoader.animalsAsHash.put(inflatedAnimal.getKey(), inflatedAnimal);
+
             }
 
         } catch (IOException e) {
@@ -84,7 +89,11 @@ public class DataLoader {
         return array;
     }
 
-    public static final List<Animal> getAnimals() {
+    public static List<Animal> getAnimals() {
         return animals;
+    }
+
+    public static Map<String, Animal> getAnimalsAsHash() {
+        return animalsAsHash;
     }
 }

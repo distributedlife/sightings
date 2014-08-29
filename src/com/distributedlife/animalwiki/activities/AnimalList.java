@@ -1,9 +1,13 @@
 package com.distributedlife.animalwiki.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import com.distributedlife.animalwiki.R;
@@ -34,6 +38,14 @@ public class AnimalList extends Activity {
 
         sightings = new Sightings(this);
         loadContent();
+
+        for (Sighting sighting : sightings.getAll()) {
+            Animal animal = DataLoader.getAnimalsAsHash().get(sighting.getWhat());
+
+            if (animal == null) {
+                Log.e("Sightings", "Missing animal in RowDisplayAdapter: " + sighting.getWhat());
+            }
+        }
 
         unfilteredAnimalCollection = AnimalCollectionBuilder.organiseIntoOrdersAndFamilies(DataLoader.getAnimals());
 
@@ -201,5 +213,27 @@ public class AnimalList extends Activity {
         }
 
         return super.onKeyDown(keyCode, e);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sightings:
+                Intent intent = new Intent(this, SightingsList.class);
+                startActivity(intent);
+
+                return true;
+            case R.id.expandCollapse:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

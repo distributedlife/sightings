@@ -6,4 +6,6 @@
     <string name="dummyConservationStatus">EW</string>
     <string name="animalListImageContentDescription">Thumbnail of animal</string>
     <string name="dummyAnimalCommonName">Pied Crow</string>
+    <string name="sightings">View Sightings</string>
+    <string name="dummy_date">Today</string>
 </resources>

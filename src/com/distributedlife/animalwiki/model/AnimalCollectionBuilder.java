@@ -1,6 +1,6 @@
 package com.distributedlife.animalwiki.model;
 
-import com.distributedlife.animalwiki.loaders.AnimalCommonNameComparator;
+import com.distributedlife.animalwiki.sorting.AnimalCommonNameComparator;
 import com.distributedlife.animalwiki.loaders.ReferenceDataLoader;
 
 import java.util.*;

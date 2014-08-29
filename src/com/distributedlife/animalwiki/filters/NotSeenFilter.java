@@ -18,6 +18,6 @@ public class NotSeenFilter extends ToggleFilter {
             return false;
         }
 
-        return sightings.hasSighting(animal.getCommonName().toLowerCase()) == getValue();
+        return sightings.hasSighting(animal) == getValue();
     }
 }
