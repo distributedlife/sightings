@@ -9,6 +9,10 @@ public class ShowEndemicOnlyFilter extends ToggleFilter {
 
     @Override
     public boolean exclude(Animal animal) {
+        if (!getValue()) {
+            return false;
+        }
+
         return !animal.isEndemic();
     }
 }

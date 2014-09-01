@@ -30,6 +30,7 @@ public class AnimalList extends Activity {
     private DrawerLayout drawer;
     private ExpandableListView drawerFilterList;
     private AnimalCollection unfilteredAnimalCollection;
+    private Menu menu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,71 +58,104 @@ public class AnimalList extends Activity {
         unfilteredAnimalCollection = AnimalCollectionBuilder.organiseIntoOrdersAndFamilies(DataLoader.getAnimals());
 
         animalsAdapter = new AnimalsWithOrderAdapter(this, unfilteredAnimalCollection.getHeadings(), unfilteredAnimalCollection.getChildren(), sightings, this);
-        ((ExpandableListView) findViewById(R.id.place_to_put_list)).setAdapter(animalsAdapter);
+        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.place_to_put_list);
+        expandableListView.setAdapter(animalsAdapter);
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+               @Override
+               public boolean onGroupClick(ExpandableListView expandableListView, View view, int position, long l) {
+                   for (int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+                       if (expandableListView.isGroupExpanded(i)) {
+                           menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_expand));
+                           return false;
+                       }
+                   }
 
-        SeenFilter seenFilter = new SeenFilter(true, sightings);
-        NotSeenFilter notSeenFilter = new NotSeenFilter(true, sightings);
+                   menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_collapse));
 
-        listOfFilters.add(seenFilter);
-        listOfFilters.add(notSeenFilter);
+                   return false;
+               }
+           }
+        );
 
+            SeenFilter seenFilter = new SeenFilter(true, sightings);
+            NotSeenFilter notSeenFilter = new NotSeenFilter(true, sightings);
 
-
-        List<String> headers = new ArrayList<String>();
-        headers.add("Sightings");
-        headers.add("Conservation Status");
-        headers.add("Country");
-        headers.add("Class");
-        headers.add("Endemic");
-
-        List<Filter> sightingsChildren = new ArrayList<Filter>();
-        sightingsChildren.add(seenFilter);
-        sightingsChildren.add(notSeenFilter);
-
-        List<Filter> conservationStatusChildren = addConservationStatusFilters(DataLoader.getAnimals());
-        listOfFilters.addAll(conservationStatusChildren);
-
-        List<Filter> countryChildren = addCountryFilters(DataLoader.getAnimals());
-        listOfFilters.addAll(countryChildren);
-
-        List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
-        listOfFilters.addAll(classChildren);
-
-        List<Filter> endemicChildren = addEndemicFilters();
-        listOfFilters.addAll(endemicChildren);
-
-        Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
-        headersAndChildren.put(headers.get(0), sightingsChildren);
-        headersAndChildren.put(headers.get(1), conservationStatusChildren);
-        headersAndChildren.put(headers.get(2), countryChildren);
-        headersAndChildren.put(headers.get(3), classChildren);
-        headersAndChildren.put(headers.get(4), endemicChildren);
-
-        drawerFilterList = (ExpandableListView) findViewById(R.id.filters);
-        drawerFilterList.setAdapter(new FilterAdapter(this, headers, headersAndChildren));
+            listOfFilters.add(seenFilter);
+            listOfFilters.add(notSeenFilter);
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View view, float v) {}
+            List<String> headers = new ArrayList<String>();
+            headers.add("Sightings");
+            headers.add("Conservation Status");
+            headers.add("Country");
+            headers.add("Class");
+            headers.add("Endemic");
 
-            @Override
-            public void onDrawerOpened(View view) {}
+            List<Filter> sightingsChildren = new ArrayList<Filter>();
+            sightingsChildren.add(seenFilter);
+            sightingsChildren.add(notSeenFilter);
 
-            @Override
-            public void onDrawerClosed(View view) {
+            List<Filter> conservationStatusChildren = addConservationStatusFilters(DataLoader.getAnimals());
+            listOfFilters.addAll(conservationStatusChildren);
+
+            List<Filter> countryChildren = addCountryFilters(DataLoader.getAnimals());
+            listOfFilters.addAll(countryChildren);
+
+            List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
+            listOfFilters.addAll(classChildren);
+
+            List<Filter> endemicChildren = addEndemicFilters();
+            listOfFilters.addAll(endemicChildren);
+
+            Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
+            headersAndChildren.put(headers.get(0),sightingsChildren);
+            headersAndChildren.put(headers.get(1),conservationStatusChildren);
+            headersAndChildren.put(headers.get(2),countryChildren);
+            headersAndChildren.put(headers.get(3),classChildren);
+            headersAndChildren.put(headers.get(4),endemicChildren);
+
+            drawerFilterList=(ExpandableListView)
+
+            findViewById(R.id.filters);
+
+            drawerFilterList.setAdapter(new
+
+            FilterAdapter(this,headers, headersAndChildren)
+
+            );
+
+
+            drawer=(DrawerLayout)
+
+            findViewById(R.id.drawer_layout);
+
+            drawer.setDrawerListener(new DrawerLayout.DrawerListener()
+
+            {
+                @Override
+                public void onDrawerSlide (View view,float v){
+            }
+
+                @Override
+                public void onDrawerOpened (View view){
+            }
+
+                @Override
+                public void onDrawerClosed (View view){
                 AnimalCollection filteredAnimalCollection = animalFilterer.apply(listOfFilters, unfilteredAnimalCollection);
 
                 animalsAdapter.setFilter(filteredAnimalCollection.getHeadings(), filteredAnimalCollection.getChildren());
             }
 
-            @Override
-            public void onDrawerStateChanged(int i) {}
-        });
-    }
+                @Override
+                public void onDrawerStateChanged ( int i){
+                }
+            }
 
-    private List<Filter> addEndemicFilters() {
+            );
+        }
+
+        private List<Filter> addEndemicFilters() {
         List<Filter> endemicChildren = new ArrayList<Filter>();
 
         endemicChildren.add(new ShowEndemicOnlyFilter());
@@ -241,6 +275,8 @@ public class AnimalList extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
 
+        this.menu = menu;
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -253,9 +289,45 @@ public class AnimalList extends Activity {
 
                 return true;
             case R.id.expandCollapse:
+                ExpandableListView listView = (ExpandableListView) findViewById(R.id.place_to_put_list);
+                boolean oneClosed = false;
+                for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+                    if (listView.isGroupExpanded(i)) {
+                        listView.collapseGroup(i);
+                        oneClosed = true;
+                    }
+                }
+
+                if (!oneClosed) {
+                    for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+                        listView.expandGroup(i);
+                    }
+                    menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_collapse));
+                } else {
+                    menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_expand));
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        ExpandableListView listView = (ExpandableListView) findViewById(R.id.place_to_put_list);
+        boolean oneClosed = false;
+        for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+            if (listView.isGroupExpanded(i)) {
+                listView.collapseGroup(i);
+                oneClosed = true;
+            }
+        }
+
+        if (oneClosed) {
+            menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_expand));
+        } else {
+            finish();
         }
     }
 }
