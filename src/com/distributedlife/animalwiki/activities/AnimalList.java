@@ -30,6 +30,7 @@ public class AnimalList extends Activity {
     private DrawerLayout drawer;
     private ExpandableListView drawerFilterList;
     private AnimalCollection unfilteredAnimalCollection;
+    private AnimalCollection currentAnimalCollection;
     private Menu menu;
 
     @Override
@@ -45,7 +46,7 @@ public class AnimalList extends Activity {
 
             if (animal == null) {
                 Log.e("Sightings", "Missing animal in RowDisplayAdapter: " + sighting.getWhat());
-                for(Animal candidate : DataLoader.getAnimals()) {
+                for (Animal candidate : DataLoader.getAnimals()) {
                     if (candidate.getCommonName().toLowerCase().equals(sighting.getWhat())) {
 //                        sighting.setWhat(animal.getKey());
 //                        sightings.update(sighting);
@@ -56,106 +57,103 @@ public class AnimalList extends Activity {
         }
 
         unfilteredAnimalCollection = AnimalCollectionBuilder.organiseIntoOrdersAndFamilies(DataLoader.getAnimals());
+        currentAnimalCollection = unfilteredAnimalCollection;
 
-        animalsAdapter = new AnimalsWithOrderAdapter(this, unfilteredAnimalCollection.getHeadings(), unfilteredAnimalCollection.getChildren(), sightings, this);
+        animalsAdapter = new AnimalsWithOrderAdapter(this, currentAnimalCollection.getHeadings(), currentAnimalCollection.getChildren(), sightings, this);
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.place_to_put_list);
         expandableListView.setAdapter(animalsAdapter);
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-               @Override
-               public boolean onGroupClick(ExpandableListView expandableListView, View view, int position, long l) {
-                   for (int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
-                       if (expandableListView.isGroupExpanded(i)) {
-                           menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_expand));
-                           return false;
-                       }
-                   }
+                                                       @Override
+                                                       public boolean onGroupClick(ExpandableListView expandableListView, View view, int position, long l) {
+                                                           for (int i = 0; i < currentAnimalCollection.getHeadings().size(); i++) {
+                                                               if (expandableListView.isGroupExpanded(i)) {
+                                                                   menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_expand));
+                                                                   return false;
+                                                               }
+                                                           }
 
-                   menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_collapse));
+                                                           menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_collapse));
 
-                   return false;
-               }
-           }
+                                                           return false;
+                                                       }
+                                                   }
         );
 
-            SeenFilter seenFilter = new SeenFilter(true, sightings);
-            NotSeenFilter notSeenFilter = new NotSeenFilter(true, sightings);
+        SeenFilter seenFilter = new SeenFilter(true, sightings);
+        NotSeenFilter notSeenFilter = new NotSeenFilter(true, sightings);
 
-            listOfFilters.add(seenFilter);
-            listOfFilters.add(notSeenFilter);
-
-
-            List<String> headers = new ArrayList<String>();
-            headers.add("Sightings");
-            headers.add("Conservation Status");
-            headers.add("Country");
-            headers.add("Class");
-            headers.add("Endemic");
-
-            List<Filter> sightingsChildren = new ArrayList<Filter>();
-            sightingsChildren.add(seenFilter);
-            sightingsChildren.add(notSeenFilter);
-
-            List<Filter> conservationStatusChildren = addConservationStatusFilters(DataLoader.getAnimals());
-            listOfFilters.addAll(conservationStatusChildren);
-
-            List<Filter> countryChildren = addCountryFilters(DataLoader.getAnimals());
-            listOfFilters.addAll(countryChildren);
-
-            List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
-            listOfFilters.addAll(classChildren);
-
-            List<Filter> endemicChildren = addEndemicFilters();
-            listOfFilters.addAll(endemicChildren);
-
-            Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
-            headersAndChildren.put(headers.get(0),sightingsChildren);
-            headersAndChildren.put(headers.get(1),conservationStatusChildren);
-            headersAndChildren.put(headers.get(2),countryChildren);
-            headersAndChildren.put(headers.get(3),classChildren);
-            headersAndChildren.put(headers.get(4),endemicChildren);
-
-            drawerFilterList=(ExpandableListView)
-
-            findViewById(R.id.filters);
-
-            drawerFilterList.setAdapter(new
-
-            FilterAdapter(this,headers, headersAndChildren)
-
-            );
+        listOfFilters.add(seenFilter);
+        listOfFilters.add(notSeenFilter);
 
 
-            drawer=(DrawerLayout)
+        List<String> headers = new ArrayList<String>();
+        headers.add("Sightings");
+        headers.add("Conservation Status");
+        headers.add("Country");
+        headers.add("Class");
+        headers.add("Endemic");
 
-            findViewById(R.id.drawer_layout);
+        List<Filter> sightingsChildren = new ArrayList<Filter>();
+        sightingsChildren.add(seenFilter);
+        sightingsChildren.add(notSeenFilter);
 
-            drawer.setDrawerListener(new DrawerLayout.DrawerListener()
+        List<Filter> conservationStatusChildren = addConservationStatusFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(conservationStatusChildren);
 
-            {
-                @Override
-                public void onDrawerSlide (View view,float v){
-            }
+        List<Filter> countryChildren = addCountryFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(countryChildren);
 
-                @Override
-                public void onDrawerOpened (View view){
-            }
+        List<Filter> classChildren = addClassFilters(DataLoader.getAnimals());
+        listOfFilters.addAll(classChildren);
 
-                @Override
-                public void onDrawerClosed (View view){
-                AnimalCollection filteredAnimalCollection = animalFilterer.apply(listOfFilters, unfilteredAnimalCollection);
+        List<Filter> endemicChildren = addEndemicFilters();
+        listOfFilters.addAll(endemicChildren);
 
-                animalsAdapter.setFilter(filteredAnimalCollection.getHeadings(), filteredAnimalCollection.getChildren());
-            }
+        Map<String, List<Filter>> headersAndChildren = new HashMap<String, List<Filter>>();
+        headersAndChildren.put(headers.get(0), sightingsChildren);
+        headersAndChildren.put(headers.get(1), conservationStatusChildren);
+        headersAndChildren.put(headers.get(2), countryChildren);
+        headersAndChildren.put(headers.get(3), classChildren);
+        headersAndChildren.put(headers.get(4), endemicChildren);
 
-                @Override
-                public void onDrawerStateChanged ( int i){
-                }
-            }
+        drawerFilterList = (ExpandableListView)
 
-            );
-        }
+                findViewById(R.id.filters);
 
-        private List<Filter> addEndemicFilters() {
+        drawerFilterList.setAdapter(new
+
+                        FilterAdapter(this, headers, headersAndChildren)
+        );
+
+
+        drawer = (DrawerLayout)
+
+                findViewById(R.id.drawer_layout);
+
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+                                     @Override
+                                     public void onDrawerSlide(View view, float v) {
+                                     }
+
+                                     @Override
+                                     public void onDrawerOpened(View view) {
+                                     }
+
+                                     @Override
+                                     public void onDrawerClosed(View view) {
+                                         currentAnimalCollection = animalFilterer.apply(listOfFilters, unfilteredAnimalCollection);
+
+                                         animalsAdapter.setFilter(currentAnimalCollection.getHeadings(), currentAnimalCollection.getChildren());
+                                     }
+
+                                     @Override
+                                     public void onDrawerStateChanged(int i) {
+                                     }
+                                 }
+        );
+    }
+
+    private List<Filter> addEndemicFilters() {
         List<Filter> endemicChildren = new ArrayList<Filter>();
 
         endemicChildren.add(new ShowEndemicOnlyFilter());
@@ -165,7 +163,7 @@ public class AnimalList extends Activity {
 
     private void loadContent() {
         try {
-            DataLoader.load(getAssets().open("animals.json"));
+            DataLoader.load(getAssets().open("animals.csv"));
             ReferenceDataLoader.load(getAssets().open("reference.json"));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -291,7 +289,7 @@ public class AnimalList extends Activity {
             case R.id.expandCollapse:
                 ExpandableListView listView = (ExpandableListView) findViewById(R.id.place_to_put_list);
                 boolean oneClosed = false;
-                for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+                for (int i = 0; i < currentAnimalCollection.getHeadings().size(); i++) {
                     if (listView.isGroupExpanded(i)) {
                         listView.collapseGroup(i);
                         oneClosed = true;
@@ -299,7 +297,7 @@ public class AnimalList extends Activity {
                 }
 
                 if (!oneClosed) {
-                    for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+                    for (int i = 0; i < currentAnimalCollection.getHeadings().size(); i++) {
                         listView.expandGroup(i);
                     }
                     menu.getItem(0).setIcon(getResources().getDrawable(R.drawable.ic_action_collapse));
@@ -317,7 +315,7 @@ public class AnimalList extends Activity {
     public void onBackPressed() {
         ExpandableListView listView = (ExpandableListView) findViewById(R.id.place_to_put_list);
         boolean oneClosed = false;
-        for(int i = 0; i < unfilteredAnimalCollection.getHeadings().size(); i++) {
+        for (int i = 0; i < currentAnimalCollection.getHeadings().size(); i++) {
             if (listView.isGroupExpanded(i)) {
                 listView.collapseGroup(i);
                 oneClosed = true;

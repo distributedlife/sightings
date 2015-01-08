@@ -15,6 +15,7 @@ import com.distributedlife.animalwiki.clickaction.SeenIt;
 import com.distributedlife.animalwiki.db.Sightings;
 import com.distributedlife.animalwiki.formatting.AnimalFormatting;
 import com.distributedlife.animalwiki.loaders.DataLoader;
+import com.distributedlife.animalwiki.loaders.ReferenceDataLoader;
 import com.distributedlife.animalwiki.model.Animal;
 
 import java.io.IOException;
@@ -90,7 +91,16 @@ public class AnimalDisplay extends Activity {
         genus.setText(animal.getGenus());
 
         if (animal.isEndemic()) {
-            ((TextView) findViewById(R.id.endemic)).setText(String.format("Endemic to %s", animal.getCountries().get(0)));
+            String country = animal.getCountries().get(0);
+            ((TextView) findViewById(R.id.endemic)).setText(String.format("Endemic to %s", ReferenceDataLoader.replaceCountry(country)));
+            InputStream ims = null;
+            try {
+                ims = getAssets().open(String.format("flags/%s.png", country.toLowerCase().replaceAll(" ", "_")));
+                Drawable d = Drawable.createFromStream(ims, null);
+                ((ImageView) findViewById(R.id.flag)).setImageDrawable(d);
+            } catch (IOException e) {
+                ((ImageView) findViewById(R.id.flag)).setImageResource(R.drawable.ic_launcher);
+            }
         } else {
             findViewById(R.id.endemic).setVisibility(View.INVISIBLE);
         }

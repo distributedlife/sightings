@@ -37,6 +37,22 @@ public class Animal {
         this.countries = countries;
     }
 
+    public Animal(String commonName, String officialName, String phylum, String klass, String order, String family, String genus, String species, String subspecies, ConservationStatus conservationStatus, String filename, List<String> colours, List<String> countries) {
+        this.commonName = commonName;
+        this.officialName = officialName;
+        this.phylum = phylum;
+        this.klass = klass;
+        this.order = order;
+        this.family = family;
+        this.genus = genus;
+        this.species = species;
+        this.subspecies = subspecies;
+        this.conservationStatus = conservationStatus;
+        this.filename = filename;
+        this.colours = colours;
+        this.countries = countries;
+    }
+
     public String getCommonName() {
         return commonName;
     }
